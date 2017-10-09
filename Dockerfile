@@ -23,5 +23,17 @@ COPY .tmux.conf /root/.tmux.conf
 # QtCreator
 RUN apt-get update && apt-get install -y qtcreator
 
+# VS Code
+WORKDIR /tmp
+RUN apt-get install -y apt-transport-https && \
+    wget -O - https://code.headmelted.com/installers/apt.sh > install-vscode.sh && \
+    chmod +x install-vscode.sh && \
+    ./install-vscode.sh &&\
+    rm install-vscode.sh
+RUN touch /usr/local/bin/code-oss-as-root && \
+    echo "#!/bin/bash" >> /usr/local/bin/code-oss-as-root && \
+    echo "code-oss --user-data-dir=\"~/\" \$@" >> /usr/local/bin/code-oss-as-root && \
+    chmod +x /usr/local/bin/code-oss-as-root
+
 WORKDIR /root/catkin_ws
 CMD ["/bin/bash"]
