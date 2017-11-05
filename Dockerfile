@@ -23,5 +23,16 @@ COPY .tmux.conf /root/.tmux.conf
 # QtCreator
 RUN apt-get update && apt-get install -y qtcreator
 
+# Pycharm
+RUN apt-get update && apt-get install -y openjdk-7-jdk
+ADD pycharm-community-2017.2.4.tar.gz /opt
+WORKDIR /opt
+RUN mv pycharm-community-2017.2.4 pycharm-community && \
+    touch /usr/local/bin/pycharm && \
+    echo "#!/bin/bash" >> /usr/local/bin/pycharm-ros && \
+    echo "bash -i -c \"/opt/pycharm-community/bin/pycharm.sh\" %f" >> /usr/local/bin/pycharm && \
+    chmod u+x /usr/local/bin/pycharm
+
+
 WORKDIR /root/catkin_ws
 CMD ["/bin/bash"]
